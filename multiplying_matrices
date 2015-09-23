@@ -1,0 +1,50 @@
+#include <iostream>
+using namespace std;
+
+int ** matrix; 
+	
+int find_fastest(int &matrices,  int dim[], int start, int end){ //TODO
+	//cout << matrix[start][end] << "\n";
+	if(matrix[start][end] != 0) return matrix[start][end];
+	
+	if(start == end) {
+		matrix[start][end] = 0;
+	}
+	else{
+		matrix[start][end] = min(
+			(find_fastest(matrices, dim, start, end-1)+(dim[start]*dim[end-1]*dim[end])), 
+			(find_fastest(matrices, dim, start+1, end)+(dim[start]*dim[start+1]*dim[end]))
+			);
+	}
+//	cout << "dim: " << (dim[start]*dim[start+1]*dim[end])<< " ";
+//	cout << start << " " << end << " " << matrix[start][end] << "\n";
+	return matrix[start][end];
+
+}
+
+int main(){
+	
+	int matrices;
+	cin >> matrices;
+	matrix = new int * [matrices];
+	
+	int * dimensions = new int [matrices+1];
+
+	
+	for(int i = 0; i < matrices + 1; i++){ cin >> dimensions[i]; }
+	for(int i = 0; i < matrices; i++){ 
+		matrix[i] = new int [matrices];
+		for(int j = 0; j < matrices; j++){
+			matrix[i][j] = 0;
+		}
+	}
+	//cout << matrix[0][matrices] << "\n";
+	cout << find_fastest(matrices, dimensions, 0, matrices-1);
+	
+	for(int i = 0; i < matrices; ++i) {
+    	delete [] matrix[i];
+	}
+	delete [] matrix;
+	
+	return 0;
+}
